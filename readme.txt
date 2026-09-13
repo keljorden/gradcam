@@ -26,7 +26,44 @@ date: 13.09.2026
 
 observation: 
 
-    our best model achived :
+our best model :
+
+
+my_best_CNN_model(
+  (layers): Sequential(
+    (0): Conv2d(1, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, bias=True, track_running_stats=True)
+    (2): ReLU()
+    (3): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (4): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, bias=True, track_running_stats=True)
+    (5): ReLU()
+    (6): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (7): Dropout2d(p=0.1, inplace=False)
+    (8): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (9): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, bias=True, track_running_stats=True)
+    (10): ReLU()
+    (11): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (12): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, bias=True, track_running_stats=True)
+    (13): ReLU()
+    (14): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (15): Dropout2d(p=0.1, inplace=False)
+    (16): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (17): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, bias=True, track_running_stats=True)
+    (18): ReLU()
+  )
+  (classifier): Sequential(
+    (0): Flatten(start_dim=1, end_dim=-1)
+    (1): Linear(in_features=6272, out_features=128, bias=True)
+    (2): ReLU()
+    (3): Dropout(p=0.2, inplace=False)
+    (4): Linear(in_features=128, out_features=10, bias=True)
+  )
+)
+
+    
+    
+    
+  ----------  our best model achived :   ------------
 
  epoch 93:
 	train loss: 	0.1778 	||	 train acc: 	0.9340
@@ -70,3 +107,12 @@ Grad-CAM results shows something different?
 
     - out testing shows no major signs of overfitting?
     - is our grad-cam not working correctly?
+
+
+    ............. FOUND THE PROBLEM ..............
+
+so the problem was that we were targeting model.layer[16] which is the last Conv2d before Flatten() because we generally dont target BatchNorm 
+and Relu.
+
+but since we were not getting any accurate representation because of it, I targeted the model.layers[18] which is the last layer before Flatten
+ans now we are getting qualitatively better insight into our models decisions.
