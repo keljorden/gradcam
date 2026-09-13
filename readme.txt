@@ -116,3 +116,6 @@ and Relu.
 
 but since we were not getting any accurate representation because of it, I targeted the model.layers[18] which is the last layer before Flatten
 ans now we are getting qualitatively better insight into our models decisions.
+
+
+
